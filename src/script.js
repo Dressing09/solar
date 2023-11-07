@@ -14,29 +14,37 @@ const parameters = {
     // }
 }
 
+
+const textureLoader = new THREE.TextureLoader()
+
+const colorTexture = textureLoader.load('/textures/BigEarth.jpg')
+const hieghtTexture = textureLoader.load('/textures/world-map-elevation.webp')
+
+
 // Canvas
 const canvas = document.querySelector('canvas.webgl')
 
 // Scene
 const scene = new THREE.Scene()
 
+
+const directionalLight = new THREE.DirectionalLight(0xffffff, 0.9)
+directionalLight.position.set(1, 0.20, 0)
+scene.add(directionalLight)
 /**
  * Object
  */
-const geometry = new THREE.PlaneGeometry(6, 10, 10)
-const material = new THREE.MeshNormalMaterial
-({ color: 0xfff000,
-wireframe:true })
-const plane = new THREE.Mesh(geometry, material);
+const geometry = new THREE.SphereGeometry(8, 64, 64)
+const material = new THREE.MeshStandardMaterial({ map: colorTexture })//({ color: 0xfff000, wireframe:true })
+const mesh = new THREE.Mesh(geometry, material);
 
 const axesHelper = new THREE.AxesHelper( 5 );
+scene.add( axesHelper )
 
-scene.add( axesHelper );
-
-plane.rotateX(0)
-plane.rotateY(0)
-plane.rotateZ(0)
-scene.add(plane)
+mesh.rotateX(0)
+mesh.rotateY(0)
+mesh.rotateZ(0)
+scene.add(mesh)
 
 // const axesHelper = new THREE.AxesHelper( 5 );
 // scene.add( axesHelper );
@@ -127,9 +135,9 @@ const tick = () =>
 
     //Update controls
      //controls.update()
-     plane.rotateX(0.0 * delta)
-     plane.rotateY(0.0 * delta) 
-     plane.rotateZ(0.0 * delta)
+     mesh.rotateX(0.0 * delta)
+     mesh.rotateY(0.1 * delta) 
+     mesh.rotateZ(0.0 * delta)
      
     //console.log(delta);
      
@@ -141,3 +149,5 @@ const tick = () =>
 }
 
 tick()
+
+ 
