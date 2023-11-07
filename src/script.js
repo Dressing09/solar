@@ -16,8 +16,9 @@ const parameters = {
 
 
 const textureLoader = new THREE.TextureLoader()
-
 const colorTexture = textureLoader.load('/textures/BigEarth.jpg')
+const moonTexture = textureLoader.load('/textures/moonpoles.jpg')
+
 const hieghtTexture = textureLoader.load('/textures/world-map-elevation.webp')
 
 
@@ -27,24 +28,37 @@ const canvas = document.querySelector('canvas.webgl')
 // Scene
 const scene = new THREE.Scene()
 
+const hemisphereLight = new THREE.HemisphereLight(0xaaaaaa,0x000000, 0.05)
+scene.add(hemisphereLight)
 
 const directionalLight = new THREE.DirectionalLight(0xffffff, 0.9)
 directionalLight.position.set(1, 0.20, 0)
+directionalLight.shadow.radius = 50
 scene.add(directionalLight)
+
 /**
- * Object
+ * Earth
  */
-const geometry = new THREE.SphereGeometry(8, 64, 64)
-const material = new THREE.MeshStandardMaterial({ map: colorTexture })//({ color: 0xfff000, wireframe:true })
-const mesh = new THREE.Mesh(geometry, material);
+const earthGeometry = new THREE.SphereGeometry(1, 64, 64)
+const earthMaterial = new THREE.MeshStandardMaterial({ map: colorTexture })//({ color: 0xfff000, wireframe:true })
+const earthMesh = new THREE.Mesh(earthGeometry, earthMaterial);
+earthMesh.add(new THREE.AxesHelper(2));
+scene.add(earthMesh)
 
-const axesHelper = new THREE.AxesHelper( 5 );
-scene.add( axesHelper )
+//moonMesh.postion.X2 
+/**
+ * Moon
+ */
+ const moonGeometry = new THREE.SphereGeometry(.2, 64, 64)
+ const moonMaterial = new THREE.MeshStandardMaterial({ map: moonTexture })//({ color: 0xfff000, wireframe:true })
+ const moonMesh = new THREE.Mesh(moonGeometry, moonMaterial);
+ moonMesh.add(new THREE.AxesHelper(1));
+ moonMesh.rotateY(-.5 * Math.PI)
+ scene.add(moonMesh)
 
-mesh.rotateX(0)
-mesh.rotateY(0)
-mesh.rotateZ(0)
-scene.add(mesh)
+//const axesHelper = new THREE.AxesHelper( 5 );
+//scene.add( axesHelper )
+
 
 // const axesHelper = new THREE.AxesHelper( 5 );
 // scene.add( axesHelper );
@@ -112,7 +126,7 @@ renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2))
      }
  })
 
-//  gui
+  //gui
 //      .addColor(parameters, 'color')
 //      .onChange(() =>
 //      {
@@ -125,8 +139,11 @@ renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2))
  * Animate
  */
 const clock = new THREE.Clock()
+const moonDistance = 4;
 let timeSinceLastTick = 1;
 
+let moonAngle = 0;
+ 
 const tick = () =>
 {
     const elapsedTime = clock.getElapsedTime()
@@ -135,9 +152,23 @@ const tick = () =>
 
     //Update controls
      //controls.update()
-     mesh.rotateX(0.0 * delta)
-     mesh.rotateY(0.1 * delta) 
-     mesh.rotateZ(0.0 * delta)
+     earthMesh.rotateX(0.0 * delta)
+     earthMesh.rotateY(0.100 * delta) 
+     earthMesh.rotateZ(0.0 * delta)
+
+     const moonX = Math.cos(moonAngle) * moonDistance;
+     const moonY = Math.sin(moonAngle) * moonDistance;
+
+     const moonRotation = 1 * delta;
+
+    //  console.log("A:" + moonAngle + " X:" + moonX + " Z: " + moonY)
+
+     moonMesh.rotateY(moonRotation)
+    
+
+     console.log
+
+     moonMesh.position.set(moonX, 0, moonY);     
      
     //console.log(delta);
      
@@ -146,6 +177,8 @@ const tick = () =>
 
     //Call tick again on the next frame";
     window.requestAnimationFrame(tick)
+
+    moonAngle -= moonRotation;
 }
 
 tick()
