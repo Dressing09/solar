@@ -23,20 +23,20 @@ const scene = new THREE.Scene()
 /**
  * Object
  */
-const geometry = new THREE.SphereGeometry(1, 36, 24)
+const geometry = new THREE.PlaneGeometry(6, 10, 10)
 const material = new THREE.MeshNormalMaterial
 ({ color: 0xfff000,
 wireframe:true })
-const Sphere = new THREE.Mesh(geometry, material);
+const plane = new THREE.Mesh(geometry, material);
 
 const axesHelper = new THREE.AxesHelper( 5 );
 
 scene.add( axesHelper );
 
-Sphere.rotateX(10)
-Sphere.rotateY(5)
-Sphere.rotateZ(10)
-scene.add(Sphere)
+plane.rotateX(0)
+plane.rotateY(0)
+plane.rotateZ(0)
+scene.add(plane)
 
 // const axesHelper = new THREE.AxesHelper( 5 );
 // scene.add( axesHelper );
@@ -69,7 +69,7 @@ window.addEventListener('resize', () =>
  */
 // Base camera
 const camera = new THREE.PerspectiveCamera(75, sizes.width / sizes.height, 0.1, 100)
-camera.position.z = 3
+camera.position.z = 6
 scene.add(camera)
 
 // Controls
@@ -127,9 +127,9 @@ const tick = () =>
 
     //Update controls
      //controls.update()
-     Sphere.rotateX(0.19 * delta)
-     Sphere.rotateY(0.19 * delta) 
-     Sphere.rotateZ(0.19 * delta)
+     plane.rotateX(0.0 * delta)
+     plane.rotateY(0.0 * delta) 
+     plane.rotateZ(0.0 * delta)
      
     //console.log(delta);
      
